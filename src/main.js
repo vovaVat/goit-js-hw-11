@@ -5,7 +5,7 @@ import "izitoast/dist/css/iziToast.min.css";
 import SimpleLightbox from "simplelightbox";
 import "simplelightbox/dist/simple-lightbox.min.css";
 
-const form= document.querySelector(".search-form");
+const form = document.querySelector(".search-form");
 const gallery = document.querySelector(".gallery");
 const loader = document.querySelector("#loader");
 const lightbox = new SimpleLightbox('.gallery a');
@@ -14,8 +14,15 @@ form.addEventListener("submit", event => {
   event.preventDefault();
   const query = document.querySelector('.input').value.trim();
 
+
   if (!query) {
-    iziToast.warning({ message: 'Please enter a search term' });
+    iziToast.warning({
+      message: 'Please enter a search term',
+      position: 'topRight',
+      backgroundColor: '#FF0000',
+      color: 'white',
+      timeout: 5000,
+    });
     return;
   }
 
@@ -25,17 +32,32 @@ form.addEventListener("submit", event => {
   makeHTTPResponse(query)
     .then(data => {
       if (data.hits.length === 0) {
-        iziToast.info({ message: "Sorry, there are no images matching your search query. Please try again!" });
+        iziToast.info({
+          message: "Sorry, there are no images matching your search query. Please try again!",
+          position: 'topRight',
+          backgroundColor: '#EF4040',
+          color: 'white',
+          timeout: 5000,
+        });
         return;
       }
+
 
       gallery.innerHTML = renderImages(data.hits);
       lightbox.refresh();
     })
     .catch(error => {
-      iziToast.error({ message: 'Error fetching images. Please try again later.' });
+
+      iziToast.error({
+        message: 'Error fetching images. Please try again later.',
+        position: 'topRight',
+        backgroundColor: '#FF0000',
+        color: 'white',
+        timeout: 5000,
+      });
     })
     .finally(() => {
+
       loader.classList.add("hidden");
     });
 });
